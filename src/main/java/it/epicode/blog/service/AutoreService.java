@@ -1,5 +1,6 @@
 package it.epicode.blog.service;
 
+import it.epicode.blog.exception.AutoreNotFoundException;
 import it.epicode.blog.model.Autore;
 import org.springframework.stereotype.Service;
 
@@ -39,7 +40,7 @@ public class AutoreService {
             return autoreUpd;
         }
         else {
-            return null;
+            throw new AutoreNotFoundException("Autore non trovato");
         }
     }
      public String deleteAutore(int id){
@@ -49,7 +50,7 @@ public class AutoreService {
             return "Autore cancellato";
         }
         else {
-            return null;
+            throw new AutoreNotFoundException("Autore non trovato");
         }
      }
 }

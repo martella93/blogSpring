@@ -13,10 +13,10 @@ public class BlogPost {
     private String contenuto;
     private double tempoDiLettura;
 
-    public BlogPost( String categoria, String titolo, String cover, String contenuto, double tempoDiLettura) {
+    public BlogPost( String categoria, String titolo, String contenuto, double tempoDiLettura) {
         this.categoria = categoria;
         this.titolo = titolo;
-        this.cover = cover;
+        this.cover = "https://picsum.photos/200/300";
         this.contenuto = contenuto;
         this.tempoDiLettura = tempoDiLettura;
         cont++;

@@ -1,5 +1,6 @@
 package it.epicode.blog.service;
 
+import it.epicode.blog.exception.BlogPostNotFoundException;
 import it.epicode.blog.model.BlogPost;
 import org.springframework.stereotype.Service;
 
@@ -37,7 +38,7 @@ public class BlogPostService {
             return blogPostUpd;
         }
         else {
-            return null;
+            throw new BlogPostNotFoundException("Blog non trovato");
         }
     }
 
@@ -47,7 +48,7 @@ public class BlogPostService {
             blogPosts.remove(blogPostOpt.get());
             return "BlogPost cancellato";
         } else {
-            return null;
+            throw new BlogPostNotFoundException("Blog non trovato");
         }
     }
 }
