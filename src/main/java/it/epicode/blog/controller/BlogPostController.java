@@ -1,8 +1,10 @@
 package it.epicode.blog.controller;
 
+import it.epicode.blog.Dto.BlogPostDto;
 import it.epicode.blog.model.BlogPost;
 import it.epicode.blog.service.BlogPostService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,13 +17,15 @@ public class BlogPostController {
     private BlogPostService blogPostService;
 
     @PostMapping("/api/blogPost")
-    public String saveBlogPost(@RequestBody BlogPost blogPost){
-        return blogPostService.saveBlogPost(blogPost);
+    public String saveBlogPost(@RequestBody BlogPostDto blogPostDto){
+        return blogPostService.saveBlogPost(blogPostDto);
     }
 
     @GetMapping("/api/blogPost")
-    public List<BlogPost> getAllBlogPost(){
-        return blogPostService.gellAllBlogPost();
+    public Page<BlogPost> getBlogPost( @RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
+                                       @RequestParam(value = "size", required = false, defaultValue = "10") Integer size,
+                                       @RequestParam(value = "sortBy", required = false, defaultValue = "id") String sortBy){
+        return blogPostService.getBlogPost(page,size,sortBy);
     }
 
     @GetMapping("/api/blogPost/{id}")
@@ -37,8 +41,8 @@ public class BlogPostController {
     }
 
     @PutMapping("/api/blogPost/{id}")
-    public BlogPost updateBlogPost(@PathVariable int id,@RequestBody BlogPost blogPost){
-        return blogPostService.updateBlogPost(id, blogPost);
+    public BlogPost updateBlogPost(@PathVariable int id,@RequestBody BlogPostDto blogPostDto){
+        return blogPostService.updateBlogPost(id, blogPostDto);
     }
 
     @DeleteMapping("/api/blogPost/{id}")

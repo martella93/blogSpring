@@ -1,56 +1,67 @@
 package it.epicode.blog.service;
 
+
+import it.epicode.blog.Dto.AutoreDto;
 import it.epicode.blog.exception.AutoreNotFoundException;
 import it.epicode.blog.model.Autore;
+import it.epicode.blog.repository.AutoreRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class AutoreService {
 
-    private List<Autore> autori = new ArrayList<>();
+    @Autowired
+    private AutoreRepository autoreRepository;
 
-    public List<Autore> getAllAutori(){
-        return autori;
+    public String saveAutore(AutoreDto autoreDto){
+        Autore autore = new Autore();
+
+        autore.setNome(autoreDto.getNome());
+        autore.setCognome(autoreDto.getCognome());
+        autore.setEmail(autoreDto.getEmail());
+        autore.setDataDiNascita(autoreDto.getDataDiNascita());
+
+        autoreRepository.save(autore);
+        return "Autore con id: " + autore.getId() + " creato con successo";
+
+    }
+
+    public List<Autore> getAutori(){
+        return autoreRepository.findAll();
     }
 
     public Optional<Autore> getAutoreById(int id){
-        return autori.stream().filter(autore -> autore.getId()==id).findFirst();
+        return autoreRepository.findById(id);
     }
 
-    public String saveAutore(Autore autore){
-        String avatarUrl = "https://ui-avatars.com/api/?name=" + autore.getNome() + "+" + autore.getCognome();
-        autore.setAvatar(avatarUrl);
-        autori.add(autore);
-        return "Autore salvato con successo!";
-    }
+    public Autore updateAutore(int id, AutoreDto autoreDto){
+        Optional<Autore> autoreOptional = getAutoreById(id);
 
-    public Autore updateAutore(int id, Autore autoreUpd){
-        Optional<Autore> autoreOpt = getAutoreById(id);
-        if (autoreOpt.isPresent()){
-            Autore autore = autoreOpt.get();
-            autore.setNome(autoreUpd.getNome());
-            autore.setCognome(autoreUpd.getCognome());
-            autore.setEmail(autoreUpd.getEmail());
-            autore.setDataDiNascita(autoreUpd.getDataDiNascita());
-            autore.setAvatar("https://ui-avatar.com/api/?name=" + autore.getNome());
-            return autoreUpd;
+        if (autoreOptional.isPresent()){
+            Autore autore = autoreOptional.get();
+            autore.setNome(autoreDto.getNome());
+            autore.setCognome(autoreDto.getCognome());
+            autore.setEmail(autoreDto.getEmail());
+            autore.setDataDiNascita(autoreDto.getDataDiNascita());
+            return autoreRepository.save(autore);
         }
         else {
             throw new AutoreNotFoundException("Autore non trovato");
         }
     }
-     public String deleteAutore(int id){
-        Optional<Autore> autoreOpt = getAutoreById(id);
-        if (autoreOpt.isPresent()){
-            autori.remove(autoreOpt.get());
-            return "Autore cancellato";
+
+    public String deleteAutore(int id){
+        Optional<Autore> autoreOptional = getAutoreById(id);
+        if (autoreOptional.isPresent()){
+            autoreRepository.delete(autoreOptional.get());
+            return "Auotore con id " + id + " cancellato";
         }
         else {
-            throw new AutoreNotFoundException("Autore non trovato");
+            throw new AutoreNotFoundException("autore non trovato");
         }
-     }
+    }
 }

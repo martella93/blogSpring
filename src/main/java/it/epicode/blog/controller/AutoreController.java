@@ -1,5 +1,6 @@
 package it.epicode.blog.controller;
 
+import it.epicode.blog.Dto.AutoreDto;
 import it.epicode.blog.model.Autore;
 import it.epicode.blog.service.AutoreService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,13 +16,13 @@ public class AutoreController {
     private AutoreService autoreService;
 
     @PostMapping("/api/autore")
-    public String saveAutore(@RequestBody Autore autore){
-        return autoreService.saveAutore(autore);
+    public String saveAutore(@RequestBody AutoreDto autoreDto){
+        return autoreService.saveAutore(autoreDto);
     }
 
     @GetMapping("/api/autore")
     public List<Autore> getAllAutori(){
-        return autoreService.getAllAutori();
+        return autoreService.getAutori();
     }
 
     @GetMapping("/api/autore/{id}")
@@ -37,8 +38,8 @@ public class AutoreController {
     }
 
     @PutMapping("/api/autore/{id}")
-    public Autore updateAutore(@PathVariable int id,@RequestBody Autore autore){
-        return autoreService.updateAutore(id, autore);
+    public Autore updateAutore(@PathVariable int id,@RequestBody AutoreDto autoreDto){
+        return autoreService.updateAutore(id, autoreDto);
     }
 
     @DeleteMapping("/api/autore/{id}")
